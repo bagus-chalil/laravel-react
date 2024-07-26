@@ -1,20 +1,20 @@
 import React from "react";
 import { Link, Head } from '@inertiajs/react';
+import Navbar from "@/Components/Navbar";
+import NewsLists from "@/Components/Homepage/NewsLists";
+import Paginator from "@/Components/Homepage/Paginator";
 
 export default function Homepage(props) {
     return (
-        <div className="flex justify-center items-center min-h-screen bg-neutral-800 text-white text-2xl">
+        <div className='min-h-screen bg-neutral-800 text-white text-2xl'>
             <Head title={props.title} />
-            { props.news ? props.news.map((data, i) =>{
-                return (
-                    <div key={i} className="p-4 m-2 bg-white text-black">
-                        <p>{props.description}</p>
-                        <p>{data.title}</p>
-                        <p>{data.description}</p>
-                        <p>{data.author}</p>
-                    </div>
-                )
-            }) : "Tidak Ada Data"}
+            <Navbar />
+            <div className="flex justify-center flex-col lg:flex-row lg:flex-wrap lg:items-stretch items-center gap-4 p-4">
+                <NewsLists news={props.news.data} />
+            </div>
+            <div className="flex justify-center items-center">
+                <Paginator meta={props.news.meta} />
+            </div>
         </div>
     )
 
