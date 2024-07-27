@@ -26,7 +26,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+    Route::get('/news', [NewsController::class, 'show']);
     Route::post('/insert-news', [NewsController::class, 'store']);
+    Route::get('/edit-news/', [NewsController::class, 'edit'])->name('news.edit');
+    Route::post('/update-news', [NewsController::class, 'update']);
+    Route::post('/delete-news', [NewsController::class, 'destroy'])->name('news.delete');
 });
 
 require __DIR__.'/auth.php';

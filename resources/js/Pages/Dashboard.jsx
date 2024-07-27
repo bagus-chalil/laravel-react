@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, router } from '@inertiajs/react';
-import React, { useState } from 'react';
+import { Head, Link, router } from '@inertiajs/react';
+import React, { useEffect, useState } from 'react';
 
 
 export default function Dashboard(props) {
@@ -18,10 +18,15 @@ export default function Dashboard(props) {
         setIsNotif(true)
         setTitle('')
         setDescription('')
-        setAuthor('')
+        setCategory('')
     }
 
-    console.log(props);
+    useEffect(() => {
+        if (!props.allNews) {
+            router.get('/news');
+        }
+        return
+    },[])
 
     return (
         <AuthenticatedLayout
@@ -61,6 +66,29 @@ export default function Dashboard(props) {
 
                         <button className='btn btn-primary m-2' onClick={()=>handleSubmit()}> Submit </button>
                     </div>
+                </div>
+                <div className='max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4'>
+                    {props.allNews && props.allNews.length > 0 ? props.allNews.map((news,i) => {
+                        return (
+                        <div key={i} className="card w-full bg-base-100 shadow-xl m-2">
+                        <div className="card-body">
+                            <h2 className="card-title">
+                            {news.title}
+                            <div className="badge badge-secondary">{news.category}</div>
+                            </h2>
+                            <p>{news.description}</p>
+                            <div className="card-actions justify-end">
+                            <div className="badge badge-outline">
+                                <Link href={route('news.edit')} method='GET' data={{id : news.id}}>Edit</Link>
+                            </div>
+                            <div className="badge badge-outline">
+                                <Link href={route('news.delete')} method='POST' data={{id : news.id}}>Delete</Link>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        )
+                    }) : <p> Tidak ada berita!</p>}
                 </div>
             </div>
         </AuthenticatedLayout>

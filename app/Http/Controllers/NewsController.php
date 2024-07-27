@@ -55,15 +55,22 @@ class NewsController extends Controller
      */
     public function show(News $news)
     {
-        //
+        $news = News::where('author', Auth::user()->email)->latest()->get();
+        $data = ([
+            'allNews' => $news
+        ]);
+
+        return Inertia::render('Dashboard',$data);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(News $news)
+    public function edit(News $news,Request $request)
     {
-        //
+        return Inertia::render('editNews',[
+            'myNews' => $news::find($request->id)
+        ]);
     }
 
     /**
@@ -71,14 +78,22 @@ class NewsController extends Controller
      */
     public function update(Request $request, News $news)
     {
-        //
+        $data = array(
+            'title' => $request->title,
+            'description' => $request->description,
+            'category' => $request->category,
+        );
+
+        $news = News::where('id',$request->id)->update($data);
+
+        return to_route('dashboard')->with('message', 'Berita berhasil diupdate!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(News $news)
+    public function destroy(Request $request, News $news)
     {
-        //
+        News::where('id',$request->id)->delete();
     }
 }
