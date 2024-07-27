@@ -1,4 +1,6 @@
-const Navbar = () => {
+import { Link } from "@inertiajs/react"
+
+const Navbar = ({ user }) => {
     return(
         <div className="navbar bg-base-100">
         <div className="flex-1">
@@ -19,14 +21,23 @@ const Navbar = () => {
             <ul
                 tabIndex={0}
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                <li>
-                <a className="justify-between">
-                    Profile
-                    <span className="badge">New</span>
-                </a>
-                </li>
-                <li><a>Settings</a></li>
-                <li><a>Logout</a></li>
+                {!user ?
+                <>
+                    <li><Link href={route('login')} as="button">Login</Link></li>
+                    <li><Link href={route('register')} as="button">Register</Link></li>
+                </>
+                :
+                <>
+                    <li>
+                    <Link href={route('dashboard')} as="button" className="justify-between">
+                        Dashboard
+                        <span className="badge">New</span>
+                    </Link>
+                    </li>
+                    <li><Link>Settings</Link></li>
+                    <li><Link href={route('logout')} as="button" method="post">Logout</Link></li>
+                </>
+                }
             </ul>
             </div>
         </div>

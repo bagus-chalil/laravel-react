@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\NewsCollection;
 use App\Models\News;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class NewsController extends Controller
@@ -37,7 +38,16 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = array(
+            'title' => $request->title,
+            'description' => $request->description,
+            'category' => $request->category,
+            'author' => Auth::user()->email,
+        );
+
+        $news = News::create($data);
+
+        return redirect()->back()->with('message', 'Berita berhasil dibuat!');
     }
 
     /**
